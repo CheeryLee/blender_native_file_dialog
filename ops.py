@@ -1,5 +1,6 @@
 #
 # Copyright (c) 2018 Alexander "CheeryLee" Pluzhnikov
+# 
 # This file is part of blender_native_file_dialog.
 # 
 # blender_native_file_dialog is free software: you can redistribute it and/or modify
@@ -111,6 +112,27 @@ class SaveImage(bpy.types.Operator):
     bl_idname = "native_image.save"
     bl_label = "NATIVE: Save Image"
 
+    def __init__(self):
+        print("Native file dialog is working now")
+
+    def execute(self, context):
+        print("Dialog is opened")
+
+        for area in bpy.context.screen.areas:
+            if area.type == 'IMAGE_EDITOR':
+                filePath = area.spaces[0].image.filepath
+
+        try:
+            bpy.ops.image.save()
+            print("INFO: File " + filePath + " saved")
+        except RuntimeError:
+            print("ERROR: Can't save file!")
+
+        return {'FINISHED'}
+    
+    def invoke(self, context, event):
+        return self.execute(context)
+
 
 ###################
 ## Save image as ##
@@ -118,6 +140,37 @@ class SaveImage(bpy.types.Operator):
 class SaveImageAs(bpy.types.Operator):
     bl_idname = "native_image.save_as"
     bl_label = "NATIVE: Save As Image"
+    copy = BoolProperty()
+
+    def __init__(self):
+        print("Native file dialog is working now")
+
+    def execute(self, context):
+        print("Dialog is opened")
+        
+        # Get opened textfile
+        for area in bpy.context.screen.areas:
+            if area.type == 'IMAGE_EDITOR':
+                filePath = area.spaces[0].image.filepath
+
+        if filePath == '':
+            fileName = run_save_dialog(filetype = "image_save", initialDir = None)
+        else:
+            _initialDir = filePath.rpartition('/')[0]
+            fileName = run_save_dialog(filetype = "image_save", initialDir = _initialDir)
+
+        if fileName != '':
+            try:
+                bpy.ops.image.save_as(filepath = fileName)
+                print("INFO: Image file " + fileName + " saved")
+            except RuntimeError:
+                print("ERROR: Can't save text file!")
+
+        return {'FINISHED'}
+    
+    def invoke(self, context, event):
+        self.copy = False
+        return self.execute(context)
 
 
 ###############
@@ -228,7 +281,7 @@ class OpenImage(bpy.types.Operator):
         
         fileName = run_open_dialog(filetype = "image_open")
         try:
-            bpy.ops.wm.open_mainfile(filepath = fileName)
+            bpy.ops.image.open(filepath = fileName)
             print("INFO: File " + fileName + " opened")
         except RuntimeError:
             print("ERROR: Can't open file!")
@@ -287,13 +340,13 @@ def run_save_dialog(filetype, initialDir = None):
 classes = (
     SaveFile,
     SaveFileAs,
-    #SaveImage,
-    #SaveImageAs,
+    SaveImage,
+    SaveImageAs,
     SaveText,
     SaveTextAs,
 
     OpenFile,
-    #OpenImage,
+    OpenImage,
     OpenText
 )
 

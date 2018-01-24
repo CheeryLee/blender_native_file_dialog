@@ -16,6 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with blender_native_file_dialog.  If not, see <http://www.gnu.org/licenses/>.
 #
+
 import bpy
 from bpy.types import Header, Menu, Panel
 

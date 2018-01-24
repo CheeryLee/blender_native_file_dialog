@@ -39,6 +39,7 @@ if __name__ == "__main__":
     import ops, change_keymap
     import _bl_ui.space_text
     import _bl_ui.space_info
+    import _bl_ui.space_image
     
     # Operators registration
     ops._register()
@@ -46,6 +47,7 @@ if __name__ == "__main__":
     # Interface registration
     _bl_ui.space_text._register()
     _bl_ui.space_info._register()
+    _bl_ui.space_image._register()
 
     # Hotkeys registartion
     change_keymap.set_blender_keymap()

@@ -47,7 +47,19 @@ def save_file_dialog():
     print(fileName)
 
 def save_image_dialog():
-    pass
+    if len(sys.argv) > 2:
+        if sys.argv[2] != '':
+            initialDir = sys.argv[2]
+    else:
+        initialDir = ""
+
+    fileName = asksaveasfilename(title = "Save Image",
+                                    initialdir = initialDir,
+                                    filetypes = (("PNG", "*.png"), ("JPG", "*.jpg"), ("TIFF", "*.tiff"),
+                                            ("TGA", "*.tga"), ("HDR", "*.hdr"), ("BMP", "*.bmp"),
+                                            ("Iris", "*.rgb"), ("DPX", "*.dpx"), ("Cineon", "*.cin"),
+                                            ("EXR", "*.exr"), ("", "")))
+    print(fileName)
 
 def save_text_dialog():
     if len(sys.argv) > 2:
@@ -67,8 +79,12 @@ def open_file_dialog():
     fileName = askopenfilename(filetypes = (("Blender projects", "*.blend"), ("", "")))
     print(fileName)
 
-def open_image_dialog(root):
-    pass
+def open_image_dialog():
+    fileName = askopenfilename(filetypes = (("PNG", "*.png"), ("JPG", "*.jpg"), ("TIFF", "*.tiff"),
+                                            ("TGA", "*.tga"), ("HDR", "*.hdr"), ("BMP", "*.bmp"),
+                                            ("Iris", "*.rgb"), ("DPX", "*.dpx"), ("Cineon", "*.cin"),
+                                            ("EXR", "*.exr"), ("", "")))
+    print(fileName)
 
 def open_text_dialog():
     fileName = askopenfilename(filetypes = (("Text files", "*.txt"),
