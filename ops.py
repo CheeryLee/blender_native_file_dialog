@@ -151,7 +151,11 @@ class SaveImageAs(bpy.types.Operator):
         # Get opened textfile
         for area in bpy.context.screen.areas:
             if area.type == 'IMAGE_EDITOR':
+                if area.spaces[0].image is None: 
+                    return {'FINISHED'}
+
                 filePath = area.spaces[0].image.filepath
+                break
 
         if filePath == '':
             fileName = run_save_dialog(filetype = "image_save", initialDir = None)
@@ -245,7 +249,7 @@ class SaveTextAs(bpy.types.Operator):
 ###############
 class OpenFile(bpy.types.Operator):
     bl_idname = "native_wm.open_mainfile"
-    bl_label = "Open Blender File"
+    bl_label = "NATIVE: Open Blender File"
     
     def __init__(self):
         print("Native file dialog is working now")
@@ -271,7 +275,7 @@ class OpenFile(bpy.types.Operator):
 ################
 class OpenImage(bpy.types.Operator):
     bl_idname = "native_image.open"
-    bl_label = "Open Image"
+    bl_label = "NATIVE: Open Image"
 
     def __init__(self):
         print("Native file dialog is working now")
@@ -297,7 +301,7 @@ class OpenImage(bpy.types.Operator):
 ###############
 class OpenText(bpy.types.Operator):
     bl_idname = "native_text.open"
-    bl_label = "Open Text Block"
+    bl_label = "NATIVE: Open Text Block"
 
     def __init__(self):
         print("Native file dialog is working now")
@@ -354,3 +358,8 @@ def _register():
     from bpy.utils import register_class
     for cls in classes:
         register_class(cls)
+
+def _unregister():
+    from bpy.utils import unregister_class
+    for cls in classes:
+        unregister_class(cls)

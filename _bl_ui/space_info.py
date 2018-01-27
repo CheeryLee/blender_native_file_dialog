@@ -90,3 +90,7 @@ class INFO_MT_file(Menu):
 def _register():
     from bpy.utils import register_class
     register_class(INFO_MT_file)
+
+def _unregister():
+    from bpy.utils import unregister_class
+    unregister_class(INFO_MT_file)

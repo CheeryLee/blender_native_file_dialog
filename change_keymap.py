@@ -21,49 +21,59 @@ import bpy
 
 keymap_names = (
     'Window',
-    'Screen',
     'Image Generic',
     'Text'
 )
 
-save_idnames = (
-    'wm.save_mainfile',
-    'wm.save_as_mainfile',
-    'image.save',
-    'image.save_as',
-    'text.save',
-    'text.save_as'
+addon_idnames = (
+    'native_wm.save_mainfile',
+    'native_wm.save_as_mainfile',
+    'native_image.save',
+    'native_image.save_as',
+    'native_text.save',
+    'native_text.save_as',
+    'native_wm.open_mainfile',
+    'native_image.open',
+    'native_text.open'
 )
 
-open_idnames = (
-    'wm.open_mainfile',
-    'image.open',
-    'text.open'
-)
+def set_keymap():
+    make_keymap()
 
-def set_blender_keymap():
-    make_keymap(config = 'Blender')
-
-def make_keymap(config):
+def remove_keymap():
     wm = bpy.context.window_manager
 
-    for km in keymap_names:
-        keymaps = wm.keyconfigs[config].keymaps[km]
+    for kn in keymap_names:
+        for k in wm.keyconfigs.addon.keymaps[kn].keymap_items:
+            for name in addon_idnames:
+                if name == k.idname:
+                    wm.keyconfigs.addon.keymaps[kn].keymap_items.remove(k)
+                    print(name + " is removed")
+                    break
 
-        # Save keymap
-        for k in keymaps.keymap_items:
-            for id in save_idnames:
-                if k.idname == id:
-                    keymaps.keymap_items.new("native_" + id, k.type, k.value, any = k.any, 
-                                            shift = k.shift, ctrl = k.ctrl, alt = k.alt, oskey = k.oskey, 
-                                            key_modifier = k.key_modifier)
-                    k.active = False
+def make_keymap():
+    wm = bpy.context.window_manager
 
-        # Open keymap
-        for k in keymaps.keymap_items:
-            for id in open_idnames:
-                if k.idname == id:
-                    keymaps.keymap_items.new("native_" + id, k.type, k.value, any = k.any, 
-                                            shift = k.shift, ctrl = k.ctrl, alt = k.alt, oskey = k.oskey, 
-                                            key_modifier = k.key_modifier)
-                    k.active = False
+    keymaps = wm.keyconfigs.addon.keymaps.new(name = 'Window', space_type='EMPTY', region_type='WINDOW')
+    keymaps.keymap_items.new("native_wm.save_mainfile", "S", "PRESS", oskey = True)
+    keymaps.keymap_items.new("native_wm.save_mainfile", "S", "PRESS", ctrl = True)
+    keymaps.keymap_items.new("native_wm.save_mainfile", "W", "PRESS", ctrl = True)
+    keymaps.keymap_items.new("native_wm.save_as_mainfile", "S", "PRESS", oskey = True, shift = True)
+    keymaps.keymap_items.new("native_wm.save_as_mainfile", "S", "PRESS", ctrl = True, shift = True)
+    keymaps.keymap_items.new("native_wm.save_as_mainfile", "F2", "PRESS")
+    keymaps.keymap_items.new("native_wm.save_as_mainfile", "S", "PRESS", ctrl = True, alt = True)
+    keymaps.keymap_items.new("native_wm.open_mainfile", "O", "PRESS", ctrl = True)
+    keymaps.keymap_items.new("native_wm.open_mainfile", "O", "PRESS", oskey = True)
+    keymaps.keymap_items.new("native_wm.open_mainfile", "F1", "PRESS")
+
+    keymaps = wm.keyconfigs.addon.keymaps.new(name = 'Image Generic', space_type='IMAGE_EDITOR', region_type='WINDOW')
+    keymaps.keymap_items.new("native_image.save", "S", "PRESS", alt = True)
+    keymaps.keymap_items.new("native_image.save_as", "F3", "PRESS")
+    keymaps.keymap_items.new("native_image.open", "O", "PRESS", alt = True)
+
+    keymaps = wm.keyconfigs.addon.keymaps.new(name = 'Text', space_type='TEXT_EDITOR', region_type='WINDOW')
+    keymaps.keymap_items.new("native_text.save", "S", "PRESS", alt = True, oskey = True)
+    keymaps.keymap_items.new("native_text.save", "S", "PRESS", alt = True)
+    keymaps.keymap_items.new("native_text.save_as", "S", "PRESS", alt = True, shift = True, oskey = True)
+    keymaps.keymap_items.new("native_text.save_as", "S", "PRESS", alt = True, shift = True, ctrl = True)
+    keymaps.keymap_items.new("native_text.open", "O", "PRESS", alt = True)

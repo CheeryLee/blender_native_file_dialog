@@ -217,7 +217,7 @@ class TEXT_MT_templates_py(Menu):
     def draw(self, context):
         self.path_menu(
             bpy.utils.script_paths("templates_py"),
-            "native_text.open",
+            "text.open",
             props_default={"internal": True},
         )
 
@@ -228,7 +228,7 @@ class TEXT_MT_templates_osl(Menu):
     def draw(self, context):
         self.path_menu(
             bpy.utils.script_paths("templates_osl"),
-            "native_text.open",
+            "text.open",
             props_default={"internal": True},
         )
 
@@ -365,3 +365,8 @@ def _register():
     from bpy.utils import register_class
     for cls in classes:
         register_class(cls)
+
+def _unregister():
+    from bpy.utils import unregister_class
+    for cls in classes:
+        unregister_class(cls)
