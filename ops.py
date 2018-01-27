@@ -311,7 +311,7 @@ class OpenText(bpy.types.Operator):
         
         fileName = run_open_dialog(filetype = "text_open")
         try:
-            bpy.ops.wm.open_mainfile(filepath = fileName)
+            bpy.ops.text.open(filepath = fileName)
             print("INFO: File " + fileName + " opened")
         except RuntimeError:
             print("ERROR: Can't open file!")
